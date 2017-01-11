@@ -1,7 +1,16 @@
 .main-content {
   margin-bottom: 40px; }
 
-.container p {
-  font-size: 1.5rem; }
+.breadcrumb {
+  margin-left: 20px; }
+
+html {
+  font-size: 18px; }
+
+.collection-item {
+  padding-bottom: 20px !important;
+  padding-top: 20px !important; }
+  .collection-item h5 {
+    margin-top: 0; }
 
 /*# sourceMappingURL=style.css.map */

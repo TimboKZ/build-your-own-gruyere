@@ -28,21 +28,29 @@ if (!isset($GLOBALS['page_title'])) {
     <div class="nav-wrapper container"><a id="logo-container" href="/" class="brand-logo">G for Gruyere</a>
 
         <?php
+        function is_active(string $page)
+        {
+            return $GLOBALS['current_page'] === $page ? ' class="active"' : '';
+        }
+
         function nav_menu()
         {
+            ?>
+            <li<?= is_active(''); ?>><a href="/">Home</a></li>
+            <?php
             if (Auth::isGuest()) :
                 ?>
-                <li><a href="/">Home</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/sign-up">Sign Up</a></li>
+                <li<?= is_active('login'); ?>><a href="/login">Login</a></li>
+                <li<?= is_active('sign-up'); ?>><a href="/sign-up">Sign Up</a></li>
                 <?php
             else:
                 ?>
-                <li><a href="/">Home</a></li>
-                <li><a href="/snippets">Snippets</a></li>
-                <li><a href="/files">Files</a></li>
-                <li><a href="/settings">Settings</a></li>
-                <li><a href="/logout">Logout</a></li>
+                <li<?= is_active('snippets'); ?>>>
+                    <a href="/snippets">Snippets</a>
+                </li>
+                <li<?= is_active('files'); ?>><a href="/files">Files</a></li>
+                <li<?= is_active('settings'); ?>><a href="/settings">Settings</a></li>
+                <li><a href="/logout">Logout (<?= $_SESSION['user_name']; ?>)</a></li>
                 <?php
             endif;
         }
@@ -62,4 +70,10 @@ if (!isset($GLOBALS['page_title'])) {
 
 <div class="container main-content">
     <div class="section">
-        <h1><?php echo $GLOBALS['page_title']; ?></h1>
+        <nav>
+            <div class="nav-wrapper pink darken-4">
+                <div class="col s12">
+                    <a href="" class="breadcrumb"><?php echo $GLOBALS['page_title']; ?></a>
+                </div>
+            </div>
+        </nav>

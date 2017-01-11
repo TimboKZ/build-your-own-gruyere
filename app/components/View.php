@@ -13,7 +13,7 @@ namespace BYOG\Components;
  */
 class View
 {
-    public static function render($view)
+    public static function render(string $view)
     {
         include __DIR__ . '/../views/' . $view . '.php';
     }

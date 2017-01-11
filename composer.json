@@ -13,7 +13,8 @@
     "psr-4": {
       "BYOG\\": "app/",
       "BYOG\\Components\\": "app/components",
-      "BYOG\\Controllers\\": "app/controllers"
+      "BYOG\\Controllers\\": "app/controllers",
+      "BYOG\\Managers\\": "app/managers"
     }
   }
 }

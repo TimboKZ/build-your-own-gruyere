@@ -7,9 +7,10 @@
 
 namespace BYOG;
 
-use BYOG\Components\DB;
+use BYOG\Components\Auth;
 use BYOG\Components\Helper;
 use BYOG\Components\View;
+use BYOG\Controllers\AuthController;
 
 /**
  * Class App
@@ -19,12 +20,24 @@ class App
 {
     public function start()
     {
-        $sql = "SELECT * FROM users WHERE id = ?";
-        $stmt = DB::getConnection()->prepare($sql);
-        $stmt->bindValue(1, '123s');
-        $stmt->execute();
+        $comps = Helper::uriComps();
 
-        View::render('404');
+        $GLOBALS['current_page'] = $comps[0];
 
+        switch ($comps[0]) {
+            case '':
+                View::render('home');
+                break;
+            case 'login':
+                AuthController::login();
+                break;
+            case 'logout':
+                Auth::logout();
+                Helper::redirect('/');
+                break;
+            default:
+                http_response_code(404);
+                View::render('404');
+        }
     }
 }

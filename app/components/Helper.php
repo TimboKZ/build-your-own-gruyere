@@ -18,4 +18,10 @@ class Helper
         $uri = mb_ereg_replace('\\?.*?$', '', $_SERVER['REQUEST_URI']);
         return explode('/', strtolower(trim($uri, '/')));
     }
+
+    public static function redirect($location)
+    {
+        header('Location: ' . $location);
+        die();
+    }
 }
