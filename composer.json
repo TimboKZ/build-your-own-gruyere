@@ -1,0 +1,19 @@
+{
+  "name": "timbokz/build-your-own-gruyere",
+  "authors": [
+    {
+      "name": "Tim Kuzhagaliyev",
+      "email": "tim.kuzh@gmail.com"
+    }
+  ],
+  "require": {
+    "doctrine/dbal": "v2.5.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "BYOG\\": "app/",
+      "BYOG\\Components\\": "app/components",
+      "BYOG\\Controllers\\": "app/controllers"
+    }
+  }
+}
