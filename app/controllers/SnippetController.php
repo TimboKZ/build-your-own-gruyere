@@ -13,6 +13,7 @@ use BYOG\Components\Helper;
 use BYOG\Components\HTML;
 use BYOG\Components\View;
 use BYOG\Managers\SnippetManager;
+use BYOG\Managers\UserManager;
 
 /**
  * Class SnippetController
@@ -26,7 +27,7 @@ class SnippetController
             if (Auth::isGuest()) {
                 Helper::redirect('/login');
             }
-            $user = Auth::getUserById($_SESSION['user_id']);
+            $user = UserManager::getUserById($_SESSION['user_id']);
             if ($user) {
                 self::addSnippet($_SESSION['user_id']);
                 self::renderSnippets($user);
@@ -39,7 +40,7 @@ class SnippetController
             if (strtolower($uriComps[1]) === $_SESSION['user_name']) {
                 Helper::redirect('/snippets');
             }
-            $user = Auth::getUserByName($uriComps[1]);
+            $user = UserManager::getUserByName($uriComps[1]);
             if ($user) {
                 self::renderSnippets($user);
                 return;
@@ -53,7 +54,7 @@ class SnippetController
         if (isset($_POST['content']) && isset($_POST['token'])) {
             $content = $_POST['content'];
             $token = $_POST['token'];
-            if (!CSRFProtection::checkToken('add_snippet', $token)) {
+            if (!CSRFProtection::checkToken('add_snippet_' . $_SESSION['user_id'], $token)) {
                 $GLOBALS['error'] = 'Form token is invalid! Please try again.';
                 return;
             }
@@ -61,7 +62,7 @@ class SnippetController
                 $GLOBALS['error'] = 'Snippet content cannot be empty.';
                 return;
             }
-            SnippetManager::addSnippet($user_id, HTML::purify($content));
+            SnippetManager::addSnippet($user_id, nl2br(HTML::purify($content)));
             Helper::redirect('/snippets');
         }
     }

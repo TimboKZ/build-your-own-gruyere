@@ -7,6 +7,8 @@
 
 namespace BYOG\Components;
 
+use BYOG\Managers\UserManager;
+
 /**
  * Class Auth
  * @package BYOG\Components
@@ -15,27 +17,12 @@ class Auth
 {
     private static $authorised = null;
 
-    private static $usernameRegex = '/^[A-Za-z0-9]+$/';
-
-    public static function getUserById(string $id)
-    {
-        $conn = DB::getConnection();
-        return $conn->fetchAssoc("SELECT * FROM users WHERE id = ? LIMIT 1", [$id]);
-    }
-
-    public static function getUserByName(string $username)
-    {
-        if (!preg_match(self::$usernameRegex, $username)) {
-            return null;
-        }
-        $conn = DB::getConnection();
-        return $conn->fetchAssoc("SELECT * FROM users WHERE name = ? LIMIT 1", [$username]);
-    }
+    public static $usernameRegex = '/^[A-Za-z0-9]+$/';
 
     public static function login(string $username, string $password): bool
     {
         $conn = DB::getConnection();
-        $user = self::getUserByName($username);
+        $user = UserManager::getUserByName($username);
         if (!$user) {
             return false;
         }
@@ -79,6 +66,9 @@ class Auth
         if (count($users) > 0) {
             return 'This username is already taken.';
         }
+        if (empty($displayName)) {
+            return 'Display name cannot be empty.';
+        }
         if (strlen($displayName) > 20) {
             return 'Display name is too long.';
         }
@@ -98,8 +88,19 @@ class Auth
         return '';
     }
 
+    public static function changePass(string $userId, string $plainPass)
+    {
+        $conn = DB::getConnection();
+        $conn->update('users', [
+            'pass' => self::getSalt($userId, $plainPass),
+        ], [
+            'id' => $userId,
+        ]);
+    }
+
     public static function logout()
     {
+        session_unset();
         session_destroy();
     }
 
@@ -138,6 +139,11 @@ class Auth
                 self::logout();
                 return false;
             }
+            if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity'] > 3600)) {
+                self::logout();
+                return false;
+            }
+            $_SESSION['last_activity'] = time();
             return true;
         }
     }

@@ -12,6 +12,7 @@ use BYOG\Components\Helper;
 use BYOG\Components\View;
 use BYOG\Controllers\APIController;
 use BYOG\Controllers\AuthController;
+use BYOG\Controllers\SettingsController;
 use BYOG\Controllers\SnippetController;
 use EasyCSRF\EasyCSRF;
 use EasyCSRF\NativeSessionProvider;
@@ -24,6 +25,9 @@ class App
 {
     public function start()
     {
+
+        header('X-Frame-Options: DENY');
+
         $comps = Helper::uriComps();
 
         $GLOBALS['current_page'] = $comps[0];
@@ -37,6 +41,9 @@ class App
                 break;
             case 'snippets':
                 SnippetController::handle($comps);
+                break;
+            case 'settings':
+                SettingsController::settings();
                 break;
             case 'login':
                 AuthController::login();

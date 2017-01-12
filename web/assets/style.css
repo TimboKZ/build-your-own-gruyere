@@ -44,4 +44,17 @@ code {
   padding: 2px 4px;
   margin: 0 2px; }
 
+input, textarea {
+  box-sizing: border-box !important;
+  border-right: solid 1px #ccc !important;
+  border-left: solid 1px #ccc !important;
+  border-top: solid 1px #ccc !important;
+  padding: 0 10px !important; }
+
+.input-field label:not(.active) {
+  margin-left: 10px !important; }
+
+.input-field label.active {
+  margin-top: -10px !important; }
+
 /*# sourceMappingURL=style.css.map */

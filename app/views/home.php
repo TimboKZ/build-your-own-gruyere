@@ -11,7 +11,7 @@ $GLOBALS['page_title'] = 'Home';
 include 'includes/header.php';
 ?>
 
-    <h4>All registered users:</h4>
+    <h4>All registered users</h4>
 
     <p>Users marked with <code>Admin</code> are the administrators. <code>Locked</code> are the users whose accounts
         were locked due to brute force attacks. <code>Disabled</code> are the users that were disabled by admins, they

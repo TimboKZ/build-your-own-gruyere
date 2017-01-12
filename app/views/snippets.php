@@ -19,12 +19,13 @@ include 'includes/header.php';
 if ($ownSnippets) :
     ?>
 
-    <h4>Add a snippet:</h4>
+    <h4>Add a snippet</h4>
 
     <div class="row">
         <form class="col s12" method="post">
             <div class="card-panel white">
-                <input type="hidden" name="token" value="<?= CSRFProtection::genToken('add_snippet') ?>">
+                <input type="hidden" name="token"
+                       value="<?= CSRFProtection::genToken('add_snippet_' . $_SESSION['user_id']) ?>">
                 <div class="row">
                     <div class="input-field col s12">
                         <?php
@@ -32,7 +33,7 @@ if ($ownSnippets) :
                         ?>
                         <textarea id="content" name="content" class="materialize-textarea"
                                   required><?= $content; ?></textarea>
-                        <label for="content">Add Snippet</label>
+                        <label for="content">Snippet content</label>
                         <p class="input-comment">You can use <code>&lt;b></code> and <code>&lt;i></code> tags, all other
                             HTML will be stripped.</p>
                     </div>
@@ -74,14 +75,14 @@ if ($ownSnippets) :
 EOD;
     ?>
 
-    <h4>Snippets:</h4>
+    <h4>Your snippets</h4>
 
     <?php
 endif;
 $snippets = SnippetManager::getSnippets($GLOBALS['snippet_user']['id']);
 if (count($snippets) === 0) :
     ?>
-    <h5 class="center-align">No snippets to display.</h5>
+    <h6 class="center-align">No snippets to display.</h6>
     <?php
 else:
     ?>
@@ -94,7 +95,9 @@ else:
                 if ($ownSnippets) :
                     ?>
                     <div class="right snippet-button">
-                        <a href="#" data-id="<?= $snippet['id']; ?>" class="snippet-delete-button waves-effect red-text text-darken-3 waves-light btn btn-flat"><i class="material-icons left">delete</i>Delete</a>
+                        <a href="#" data-id="<?= $snippet['id']; ?>"
+                           class="snippet-delete-button waves-effect red-text text-darken-3 waves-light btn btn-flat"><i
+                                    class="material-icons left">delete</i>Delete</a>
                     </div>
                     <?php
                 endif;
