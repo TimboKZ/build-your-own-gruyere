@@ -69,7 +69,7 @@ if ($ownSnippets) :
                 endif;
                 ?>
                 <button class="btn waves-effect waves-light" type="submit" name="action">Add snippet
-                    <i class="material-icons right">send</i>
+                    <i class="material-icons right">settings_ethernet</i>
                 </button>
             </div>
         </form>

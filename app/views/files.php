@@ -66,7 +66,7 @@ include 'includes/header.php';
                 endif;
                 ?>
                 <button class="btn waves-effect waves-light" type="submit" name="action">Upload file
-                    <i class="material-icons right">send</i>
+                    <i class="material-icons right">description</i>
                 </button>
             </div>
         </form>

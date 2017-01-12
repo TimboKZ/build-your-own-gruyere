@@ -32,7 +32,7 @@ include 'includes/header.php';
                 endif;
                 ?>
                 <button class="btn waves-effect waves-light" type="submit" name="action">Login
-                    <i class="material-icons right">send</i>
+                    <i class="material-icons right">input</i>
                 </button>
             </div>
         </form>

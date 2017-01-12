@@ -64,7 +64,7 @@ include 'includes/header.php';
                 endif;
                 ?>
                 <button class="btn waves-effect waves-light" type="submit" name="action">Sign Up
-                    <i class="material-icons right">send</i>
+                    <i class="material-icons right">perm_identity</i>
                 </button>
             </div>
         </form>

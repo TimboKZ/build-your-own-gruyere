@@ -38,8 +38,6 @@ class FileController
 
     public static function uploadFile()
     {
-        echo 123;
-        var_dump($_FILES);
         if (isset($_FILES['file'])
             && isset($_POST['token'])
         ) {

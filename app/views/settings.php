@@ -75,7 +75,7 @@ $user = UserManager::getUserById($_SESSION['user_id']);
                 endif;
                 ?>
                 <button class="btn waves-effect waves-light" type="submit" name="action">Save settings
-                    <i class="material-icons right">send</i>
+                    <i class="material-icons right">settings</i>
                 </button>
             </div>
         </form>
@@ -119,7 +119,7 @@ $user = UserManager::getUserById($_SESSION['user_id']);
                 endif;
                 ?>
                 <button class="btn waves-effect waves-light" type="submit" name="action">Change password
-                    <i class="material-icons right">send</i>
+                    <i class="material-icons right">lock_open</i>
                 </button>
             </div>
         </form>
