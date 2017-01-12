@@ -14,3 +14,5 @@ defined('DB_NAME') or define('DB_NAME', 'byog');
 defined('DB_USER') or define('DB_USER', 'root');
 defined('DB_PASS') or define('DB_PASS', '');
 defined('DB_PORT') or define('DB_PORT', '3306');
+
+defined('UPLOAD_DIR') or define('UPLOAD_DIR', __DIR__ . '/../web/uploads');

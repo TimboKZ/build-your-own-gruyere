@@ -1,6 +1,7 @@
 RewriteEngine on
 
 RewriteRule ^sitemap\.xml - [L,NC]
+RewriteRule ^uploads - [L,NC]
 RewriteRule ^assets - [L,NC]
 
 RewriteCond %{REQUEST_FILENAME} !index.php

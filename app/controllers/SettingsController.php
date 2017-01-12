@@ -62,7 +62,7 @@ class SettingsController
                 isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
                 $_SERVER['SERVER_NAME']
             );
-            if (!empty($iconUrl) && strpos($iconUrl, $siteAddr) === 0) {
+            if (!empty($iconUrl) && strpos($iconUrl, $siteAddr) !== 0) {
                 $GLOBALS['error'] = 'Icon URL must begin with <code>'.$siteAddr.'</code>!';
                 return;
             }

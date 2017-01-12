@@ -50,7 +50,8 @@ include 'includes/header.php';
                     }
                     ?>
                 </h5>
-                <p><a href="/snippets/<?= $user['name']; ?>">All snippets by <?= $user['name']; ?></a></p>
+                <p><a href="/snippets/<?= $user['name']; ?>">All snippets by <?= $user['display_name']; ?>
+                        (<?= $user['name']; ?>)</a></p>
                 <p>
                     <?php
                     if ($user['last_snippet']) :

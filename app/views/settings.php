@@ -39,7 +39,13 @@ $user = UserManager::getUserById($_SESSION['user_id']);
                         <label for="icon_url">Icon URL</label>
                         <p class="input-comment">Displayed near your name on the main page. Must be uploaded through the
                             <code>Files</code> section, external sources are not allowed. (i.e. URL should begin with
-                            <code>https://animu.me/</code>)</p>
+                            <code><?php
+                            echo sprintf(
+                                "%s://%s/",
+                                isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+                                $_SERVER['SERVER_NAME']
+                            );
+                                ?></code>)</p>
                     </div>
                 </div>
                 <div class="row">

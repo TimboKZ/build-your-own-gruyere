@@ -12,10 +12,9 @@ use BYOG\Components\Helper;
 use BYOG\Components\View;
 use BYOG\Controllers\APIController;
 use BYOG\Controllers\AuthController;
+use BYOG\Controllers\FileController;
 use BYOG\Controllers\SettingsController;
 use BYOG\Controllers\SnippetController;
-use EasyCSRF\EasyCSRF;
-use EasyCSRF\NativeSessionProvider;
 
 /**
  * Class App
@@ -41,6 +40,9 @@ class App
                 break;
             case 'snippets':
                 SnippetController::handle($comps);
+                break;
+            case 'files':
+                FileController::file();
                 break;
             case 'settings':
                 SettingsController::settings();

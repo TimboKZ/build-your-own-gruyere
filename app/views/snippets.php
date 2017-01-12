@@ -8,6 +8,29 @@
 use BYOG\Managers\SnippetManager;
 use BYOG\Components\CSRFProtection;
 
+ob_start();
+?>
+    <script>
+        $(document).ready(function () {
+            $('a.snippet-delete-button').click(function (event) {
+                var that = $(this);
+                event.preventDefault();
+                $.ajax({
+                    url: '/api/snippets/' + that.data('id'),
+                    type: 'DELETE',
+                    success: function () {
+                        $('#snippet-' + that.data('id')).slideUp(500);
+                    },
+                    error: function (jqxhr) {
+                        console.log(jqxhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+<?php
+$GLOBALS['scripts'] = ob_get_clean();
+
 $ownSnippets = $GLOBALS['snippet_user']['id'] === $_SESSION['user_id'];
 if ($ownSnippets) {
     $GLOBALS['page_title'] = ['Snippets', 'Your snippets'];
@@ -51,29 +74,6 @@ if ($ownSnippets) :
             </div>
         </form>
     </div>
-
-    <?php
-    $GLOBALS['scripts'] = <<<EOD
-    <script>
-        $(document).ready(function () {
-            $('a.snippet-delete-button').click(function(event) {
-                var that = $(this);
-                event.preventDefault();
-                $.ajax({
-                    url: '/api/snippets/' + that.data('id'),
-                    type: 'DELETE',
-                    success: function () {
-                        $('#snippet-' + that.data('id')).slideUp(500);
-                    },
-                    error: function (error) {
-                        alert(error);
-                    }
-                });
-            });
-        });
-    </script>
-EOD;
-    ?>
 
     <h4>Your snippets</h4>
 

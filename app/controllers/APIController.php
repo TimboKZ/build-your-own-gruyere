@@ -8,6 +8,7 @@
 namespace BYOG\Controllers;
 
 use BYOG\Components\Auth;
+use BYOG\Components\CSRFProtection;
 use BYOG\Managers\SnippetManager;
 
 /**
@@ -36,7 +37,20 @@ class APIController
             }
             SnippetManager::removeSnippet($snippetId);
             http_response_code(200);
-            die('Token deleted.');
+            die('Snippet deleted.');
+        }
+
+
+        if (count($comps) === 3 && $comps[1] === 'files' && $_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $fileName = $comps[2];
+            $filePath = UPLOAD_DIR . '/' . $_SESSION['user_name'] . '/' . $fileName;
+            if (!file_exists($filePath)) {
+                http_response_code(400);
+                die('Specified file does not exist.');
+            }
+            unlink($filePath);
+            http_response_code(200);
+            die('File deleted.');
         }
 
         http_response_code(404);

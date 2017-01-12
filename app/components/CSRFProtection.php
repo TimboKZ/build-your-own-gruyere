@@ -35,10 +35,10 @@ class CSRFProtection
         return self::getInstance()->generate($name);
     }
 
-    public static function checkToken(string $name, string $token): bool
+    public static function checkToken(string $name, string $token, bool $multiple = false): bool
     {
         try {
-            self::getInstance()->check($name, $token, 3600);
+            self::getInstance()->check($name, $token, 3600, $multiple);
             return true;
         } catch (\Exception $e) {
             return false;
