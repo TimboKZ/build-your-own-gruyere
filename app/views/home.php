@@ -34,7 +34,7 @@ include 'includes/header.php';
                     }
                     ?>
                 </h5>
-                <p><a href="<?= $user['website']; ?>">User's homepage</a></p>
+                <p><a href="<?= $user['website']; ?>">All snippets by <?= $user['name']; ?></a></p>
                 <p>
                     <?php
                     if ($user['last_snippet']) :

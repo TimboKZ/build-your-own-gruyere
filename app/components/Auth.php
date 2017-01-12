@@ -17,22 +17,68 @@ class Auth
 
     public static function login(string $username, string $password): bool
     {
+        $conn = DB::getConnection();
         $sql = "SELECT * FROM users WHERE name = ? LIMIT 1";
-        $stmt = DB::getConnection()->prepare($sql);
+        $stmt = $conn->prepare($sql);
         $stmt->bindValue(1, $username);
         $stmt->execute();
-        if ($stmt->rowCount() !== 1) {
+        $user = $conn->fetchAssoc("SELECT * FROM users WHERE name = ? LIMIT 1", [$username]);
+        if (!$user) {
             return false;
         }
-        $user = $stmt->fetch();
-        if (!self::verifySalt($user['id'], $password, $user['pass']) || $user['is_locked']) {
+        if (!self::verifySalt($user['id'], $password, $user['pass'])) {
+            $fails = $user['failed_attempts'] + 1;
+            $lock = $fails >= 3 ? 1 : 0;
+            $conn->update('users', [
+                'failed_attempts' => $fails,
+                'is_locked' => $lock,
+            ], [
+                'id' => $user['id'],
+            ]);
             return false;
+        }
+        if ($user['is_locked']) {
+            return false;
+        } else {
+            $conn->update('users', [
+                'failed_attempts' => 0,
+            ], [
+                'id' => $user['id'],
+            ]);
         }
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['user_name'] = $user['name'];
         $_SESSION['is_admin'] = $user['is_admin'];
         $_SESSION['token'] = self::token($user['name'] . $user['pass']);
         return true;
+    }
+
+    public static function signUp(string $username, string $password): string
+    {
+        if (strlen($username) < 3 || strlen($username) > 12) {
+            return 'Username length is incorrect.';
+        }
+        if (!preg_match('/^[A-Za-z0-9]+$/', $username)) {
+            return 'Username contains invalid symbols.';
+        }
+        $conn = DB::getConnection();
+        $users = $conn->fetchAll("SELECT * FROM users WHERE name = ?", [$username]);
+        if (count($users) > 0) {
+            return 'This username is already taken.';
+        }
+        if (strlen($password) < 5) {
+            return 'Password is too short.';
+        }
+        if (strtolower($password) === $password || !preg_match('/\d/', $password)) {
+            return 'Password must contain at least one uppercase, one lowercase character and a number.';
+        }
+        $id = Helper::genId();
+        $conn->insert('users', [
+            'id' => $id,
+            'name' => $username,
+            'pass' => Auth::getSalt($id, $password),
+        ]);
+        return '';
     }
 
     public static function logout()

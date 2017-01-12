@@ -31,6 +31,9 @@ class App
             case 'login':
                 AuthController::login();
                 break;
+            case 'sign-up':
+                AuthController::signUp();
+                break;
             case 'logout':
                 Auth::logout();
                 Helper::redirect('/');

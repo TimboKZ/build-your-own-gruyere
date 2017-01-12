@@ -7,7 +7,8 @@
     }
   ],
   "require": {
-    "doctrine/dbal": "v2.5.5"
+    "doctrine/dbal": "v2.5.5",
+    "gregwar/captcha": "1.*"
   },
   "autoload": {
     "psr-4": {

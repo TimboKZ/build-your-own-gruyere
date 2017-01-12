@@ -45,7 +45,7 @@ if (!isset($GLOBALS['page_title'])) {
                 <?php
             else:
                 ?>
-                <li<?= is_active('snippets'); ?>>>
+                <li<?= is_active('snippets'); ?>>
                     <a href="/snippets">Snippets</a>
                 </li>
                 <li<?= is_active('files'); ?>><a href="/files">Files</a></li>
