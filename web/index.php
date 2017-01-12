@@ -9,6 +9,7 @@ require_once '../vendor/autoload.php';
 
 require_once '../app/Constants.php';
 
+session_name('ID');
 session_start();
 $app = new \BYOG\App();
 $app->start();
