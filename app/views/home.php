@@ -11,7 +11,7 @@ $GLOBALS['page_title'] = 'Home';
 include 'includes/header.php';
 ?>
 
-    <h3>All registered users:</h3>
+    <h4>All registered users:</h4>
 
     <ul class="collection">
         <?php
@@ -34,13 +34,14 @@ include 'includes/header.php';
                     }
                     ?>
                 </h5>
-                <p><a href="<?= $user['website']; ?>">All snippets by <?= $user['name']; ?></a></p>
+                <p><a href="/snippets/<?= $user['id']; ?>">All snippets by <?= $user['name']; ?></a></p>
                 <p>
                     <?php
                     if ($user['last_snippet']) :
                     ?>
                     <strong>Latest snippet:</strong>
-                <div><?= $user['last_snippet']['content']; ?></div>
+                <div class="snippet-content"
+                     style="border-left-color: <?= $user['colour']; ?>"><?= $user['last_snippet']['content']; ?></div>
             <?php
             else :
                 ?>

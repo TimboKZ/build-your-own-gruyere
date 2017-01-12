@@ -17,4 +17,10 @@ class View
     {
         include __DIR__ . '/../views/' . $view . '.php';
     }
+    public static function error(int $errorCode)
+    {
+        http_response_code($errorCode);
+        include __DIR__ . '/../views/' . $errorCode . '.php';
+        die();
+    }
 }

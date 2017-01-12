@@ -15,12 +15,18 @@ use BYOG\Components\DB;
  */
 class SnippetManager
 {
-    public static function getLastSnippet(string $user_id)
+    public static function getLastSnippet(string $userId)
     {
         $sql = "SELECT * FROM snippets WHERE user_id = ? ORDER BY time DESC LIMIT 1";
         $stmt = DB::getConnection()->prepare($sql);
-        $stmt->bindValue(1, $user_id);
+        $stmt->bindValue(1, $userId);
         $stmt->execute();
         return $stmt->fetch();
+    }
+
+    public static function getSnippets(string $userId): array
+    {
+        $conn = DB::getConnection();
+        return $conn->fetchAll("SELECT * FROM snippets WHERE user_id = ? ORDER BY time DESC", [$userId]);
     }
 }

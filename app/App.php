@@ -11,6 +11,9 @@ use BYOG\Components\Auth;
 use BYOG\Components\Helper;
 use BYOG\Components\View;
 use BYOG\Controllers\AuthController;
+use BYOG\Controllers\SnippetController;
+use EasyCSRF\EasyCSRF;
+use EasyCSRF\NativeSessionProvider;
 
 /**
  * Class App
@@ -24,9 +27,12 @@ class App
 
         $GLOBALS['current_page'] = $comps[0];
 
-        switch ($comps[0]) {
+        switch (strtolower($comps[0])) {
             case '':
                 View::render('home');
+                break;
+            case 'snippets':
+                SnippetController::handle($comps);
                 break;
             case 'login':
                 AuthController::login();

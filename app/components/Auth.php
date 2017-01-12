@@ -15,14 +15,27 @@ class Auth
 {
     private static $authorised = null;
 
+    private static $usernameRegex = '/^[A-Za-z0-9]+$/';
+
+    public static function getUserById(string $id)
+    {
+        $conn = DB::getConnection();
+        return $conn->fetchAssoc("SELECT * FROM users WHERE id = ? LIMIT 1", [$id]);
+    }
+
+    public static function getUserByName(string $username)
+    {
+        if (!preg_match(self::$usernameRegex, $username)) {
+            return null;
+        }
+        $conn = DB::getConnection();
+        return $conn->fetchAssoc("SELECT * FROM users WHERE name = ? LIMIT 1", [$username]);
+    }
+
     public static function login(string $username, string $password): bool
     {
         $conn = DB::getConnection();
-        $sql = "SELECT * FROM users WHERE name = ? LIMIT 1";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindValue(1, $username);
-        $stmt->execute();
-        $user = $conn->fetchAssoc("SELECT * FROM users WHERE name = ? LIMIT 1", [$username]);
+        $user = self::getUserByName($username);
         if (!$user) {
             return false;
         }
@@ -58,7 +71,7 @@ class Auth
         if (strlen($username) < 3 || strlen($username) > 12) {
             return 'Username length is incorrect.';
         }
-        if (!preg_match('/^[A-Za-z0-9]+$/', $username)) {
+        if (!preg_match(self::$usernameRegex, $username)) {
             return 'Username contains invalid symbols.';
         }
         $conn = DB::getConnection();

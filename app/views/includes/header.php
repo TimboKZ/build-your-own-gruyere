@@ -10,6 +10,11 @@ use BYOG\Components\Auth;
 if (!isset($GLOBALS['page_title'])) {
     $GLOBALS['page_title'] = 'Untitled Page';
 }
+if (is_array($GLOBALS['page_title'])) {
+    $pageTitle = $GLOBALS['page_title'][count($GLOBALS['page_title']) - 1];
+} else {
+    $pageTitle = $GLOBALS['page_title'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +22,7 @@ if (!isset($GLOBALS['page_title'])) {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-    <title><?php echo $GLOBALS['page_title']; ?> | G for Gruyere</title>
+    <title><?= $pageTitle; ?> | G for Gruyere</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css" rel="stylesheet"/>
@@ -72,8 +77,20 @@ if (!isset($GLOBALS['page_title'])) {
     <div class="section">
         <nav>
             <div class="nav-wrapper pink darken-4">
-                <div class="col s12">
-                    <a href="" class="breadcrumb"><?php echo $GLOBALS['page_title']; ?></a>
+                <div class="col s12 breadcrumb-col">
+                    <?php
+                    if (is_array($GLOBALS['page_title'])) :
+                        foreach ($GLOBALS['page_title'] as $title) :
+                            ?>
+                            <a href="" class="breadcrumb"><?= $title; ?></a>
+                            <?php
+                        endforeach;
+                    else :
+                        ?>
+                        <a href="" class="breadcrumb"><?= $GLOBALS['page_title']; ?></a>
+                        <?php
+                    endif;
+                    ?>
                 </div>
             </div>
         </nav>
