@@ -26,8 +26,18 @@ include 'includes/header.php';
                                value="<?= isset($_POST['username']) ? $_POST['username'] : ''; ?>" required
                                autocomplete="off">
                         <label for="username">Username</label>
-                        <p class="input-comment">Only lowercase and uppercase alphanumeric characters, 3 to 12
-                            characters long.</p>
+                        <p class="input-comment">Used to login. Only lowercase and uppercase alphanumeric characters, 3
+                            to 12 characters long.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="username" type="text" name="display_name" class="validate"
+                               value="<?= isset($_POST['display_name']) ? $_POST['display_name'] : ''; ?>" required
+                               autocomplete="off">
+                        <label for="display_name">Display name</label>
+                        <p class="input-comment">Displayed to other users of the website. Maximum length is 20
+                            characters.</p>
                     </div>
                 </div>
                 <div class="row">

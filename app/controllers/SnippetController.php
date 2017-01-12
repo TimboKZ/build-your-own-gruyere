@@ -36,10 +36,10 @@ class SnippetController
             }
         }
         if (count($uriComps) == 2) {
-            if (strtolower($uriComps[1]) === $_SESSION['user_id']) {
+            if (strtolower($uriComps[1]) === $_SESSION['user_name']) {
                 Helper::redirect('/snippets');
             }
-            $user = Auth::getUserById($uriComps[1]);
+            $user = Auth::getUserByName($uriComps[1]);
             if ($user) {
                 self::renderSnippets($user);
                 return;

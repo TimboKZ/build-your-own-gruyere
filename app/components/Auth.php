@@ -66,7 +66,7 @@ class Auth
         return true;
     }
 
-    public static function signUp(string $username, string $password): string
+    public static function signUp(string $username, string $displayName, string $password): string
     {
         if (strlen($username) < 3 || strlen($username) > 12) {
             return 'Username length is incorrect.';
@@ -79,6 +79,9 @@ class Auth
         if (count($users) > 0) {
             return 'This username is already taken.';
         }
+        if (strlen($displayName) > 20) {
+            return 'Display name is too long.';
+        }
         if (strlen($password) < 5) {
             return 'Password is too short.';
         }
@@ -89,6 +92,7 @@ class Auth
         $conn->insert('users', [
             'id' => $id,
             'name' => $username,
+            'display_name' => str_replace('<', '&lt;', $displayName),
             'pass' => Auth::getSalt($id, $password),
         ]);
         return '';

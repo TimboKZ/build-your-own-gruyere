@@ -13,9 +13,18 @@ include 'includes/header.php';
 
     <h4>All registered users:</h4>
 
+    <p>Users marked with <code>Admin</code> are the administrators. <code>Locked</code> are the users whose accounts
+        were locked due to brute force attacks. <code>Disabled</code> are the users that were disabled by admins, they
+        cannot add new snippets or files.</p>
+
     <ul class="collection">
         <?php
         $overview = UserManager::getOverview();
+        function chip(string $string)
+        {
+            echo '<div class="chip">' . $string . '</div>';
+        }
+
         foreach ($overview as $user) {
             ?>
             <li class="collection-item avatar">
@@ -27,14 +36,21 @@ include 'includes/header.php';
                 endif;
                 ?>
                 <h5>
-                    <strong><?= $user['name']; ?></strong>
+                    <strong class="user-title"><?= $user['display_name']; ?></strong>
                     <?php
+
                     if ($user['is_admin']) {
-                        echo '(Admin)';
+                        chip('Admin');
+                    }
+                    if ($user['is_disabled']) {
+                        chip('Disabled');
+                    }
+                    if ($user['is_locked']) {
+                        chip('Locked');
                     }
                     ?>
                 </h5>
-                <p><a href="/snippets/<?= $user['id']; ?>">All snippets by <?= $user['name']; ?></a></p>
+                <p><a href="/snippets/<?= $user['name']; ?>">All snippets by <?= $user['name']; ?></a></p>
                 <p>
                     <?php
                     if ($user['last_snippet']) :

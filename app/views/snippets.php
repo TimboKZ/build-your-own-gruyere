@@ -12,7 +12,7 @@ $ownSnippets = $GLOBALS['snippet_user']['id'] === $_SESSION['user_id'];
 if ($ownSnippets) {
     $GLOBALS['page_title'] = ['Snippets', 'Your snippets'];
 } else {
-    $GLOBALS['page_title'] = ['Snippets', $GLOBALS['snippet_user']['name'] . '\'s snippets'];
+    $GLOBALS['page_title'] = ['Snippets', $GLOBALS['snippet_user']['display_name'] . '\'s snippets'];
 }
 include 'includes/header.php';
 

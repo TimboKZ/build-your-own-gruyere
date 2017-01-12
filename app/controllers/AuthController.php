@@ -34,15 +34,20 @@ class AuthController
 
     public static function signUp()
     {
-        if (isset($_POST['username']) && isset($_POST['password']) && isset($_POST['captcha'])) {
+        if (isset($_POST['username'])
+            && isset($_POST['display_name'])
+            && isset($_POST['password'])
+            && isset($_POST['captcha'])
+        ) {
             $name = $_POST['username'];
+            $displayName = $_POST['display_name'];
             $pass = $_POST['password'];
             $captcha = $_POST['captcha'] === $_SESSION['registration_captcha'];
             unset($_SESSION['registration_captcha']);
             if (!$captcha) {
                 $GLOBALS['error'] = 'Incorrect captcha was entered.';
             } else {
-                $signUpError = Auth::signUp($name, $pass);
+                $signUpError = Auth::signUp($name, $displayName, $pass);
 
                 if (empty($signUpError)) {
                     Auth::login($name, $pass);
