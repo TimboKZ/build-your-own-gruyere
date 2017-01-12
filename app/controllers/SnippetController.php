@@ -8,8 +8,11 @@
 namespace BYOG\Controllers;
 
 use BYOG\Components\Auth;
+use BYOG\Components\CSRFProtection;
 use BYOG\Components\Helper;
+use BYOG\Components\HTML;
 use BYOG\Components\View;
+use BYOG\Managers\SnippetManager;
 
 /**
  * Class SnippetController
@@ -23,9 +26,9 @@ class SnippetController
             if (Auth::isGuest()) {
                 Helper::redirect('/login');
             }
-            $user = Auth::getUserByName($_SESSION['user_name']);
+            $user = Auth::getUserById($_SESSION['user_id']);
             if ($user) {
-                self::addSnippet();
+                self::addSnippet($_SESSION['user_id']);
                 self::renderSnippets($user);
                 return;
             } else {
@@ -45,9 +48,22 @@ class SnippetController
         View::error(404);
     }
 
-    public static function addSnippet()
+    public static function addSnippet(string $user_id)
     {
-
+        if (isset($_POST['content']) && isset($_POST['token'])) {
+            $content = $_POST['content'];
+            $token = $_POST['token'];
+            if (!CSRFProtection::checkToken('add_snippet', $token)) {
+                $GLOBALS['error'] = 'Form token is invalid! Please try again.';
+                return;
+            }
+            if (empty($content)) {
+                $GLOBALS['error'] = 'Snippet content cannot be empty.';
+                return;
+            }
+            SnippetManager::addSnippet($user_id, HTML::purify($content));
+            Helper::redirect('/snippets');
+        }
     }
 
     public static function renderSnippets($user)

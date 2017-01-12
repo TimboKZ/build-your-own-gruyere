@@ -8,6 +8,7 @@
 namespace BYOG\Managers;
 
 use BYOG\Components\DB;
+use BYOG\Components\Helper;
 
 /**
  * Class SnippetManager
@@ -15,6 +16,16 @@ use BYOG\Components\DB;
  */
 class SnippetManager
 {
+    public static function addSnippet(string $user_id, string $content)
+    {
+        $conn = DB::getConnection();
+        $conn->insert('snippets', [
+            'id' => Helper::genId(),
+            'user_id' => $user_id,
+            'content' => $content,
+        ]);
+    }
+
     public static function getLastSnippet(string $userId)
     {
         $sql = "SELECT * FROM snippets WHERE user_id = ? ORDER BY time DESC LIMIT 1";

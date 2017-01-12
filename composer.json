@@ -9,7 +9,8 @@
   "require": {
     "doctrine/dbal": "v2.5.5",
     "gregwar/captcha": "1.*",
-    "gilbitron/easycsrf": "~1.0"
+    "gilbitron/easycsrf": "~1.0",
+    "ezyang/htmlpurifier": "^4.8"
   },
   "autoload": {
     "psr-4": {
