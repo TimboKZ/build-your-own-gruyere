@@ -10,6 +10,7 @@ namespace BYOG;
 use BYOG\Components\Auth;
 use BYOG\Components\Helper;
 use BYOG\Components\View;
+use BYOG\Controllers\APIController;
 use BYOG\Controllers\AuthController;
 use BYOG\Controllers\SnippetController;
 use EasyCSRF\EasyCSRF;
@@ -30,6 +31,9 @@ class App
         switch (strtolower($comps[0])) {
             case '':
                 View::render('home');
+                break;
+            case 'api':
+                APIController::handle($comps);
                 break;
             case 'snippets':
                 SnippetController::handle($comps);

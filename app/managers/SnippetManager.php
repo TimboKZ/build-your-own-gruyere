@@ -40,4 +40,18 @@ class SnippetManager
         $conn = DB::getConnection();
         return $conn->fetchAll("SELECT * FROM snippets WHERE user_id = ? ORDER BY time DESC", [$userId]);
     }
+
+    public static function getSnippet(string $snippetId)
+    {
+        $conn = DB::getConnection();
+        return $conn->fetchAssoc("SELECT * FROM snippets WHERE id = ? LIMIT 1", [$snippetId]);
+    }
+
+    public static function removeSnippet(string $snippetId)
+    {
+        $conn = DB::getConnection();
+        $conn->delete('snippets', [
+            'id' => $snippetId,
+        ]);
+    }
 }

@@ -30,9 +30,11 @@ if ($ownSnippets) :
                         <?php
                         $content = isset($_POST['content']) ? $_POST['content'] : '';
                         ?>
-                        <textarea id="content" name="content" class="materialize-textarea" required><?= $content; ?></textarea>
+                        <textarea id="content" name="content" class="materialize-textarea"
+                                  required><?= $content; ?></textarea>
                         <label for="content">Add Snippet</label>
-                        <p class="input-comment">You can use <code>&lt;b></code> and <code>&lt;i></code> tags, all other HTML will be stripped.</p>
+                        <p class="input-comment">You can use <code>&lt;b></code> and <code>&lt;i></code> tags, all other
+                            HTML will be stripped.</p>
                     </div>
                 </div>
                 <?php
@@ -49,6 +51,29 @@ if ($ownSnippets) :
         </form>
     </div>
 
+    <?php
+    $GLOBALS['scripts'] = <<<EOD
+    <script>
+        $(document).ready(function () {
+            $('a.snippet-delete-button').click(function(event) {
+                var that = $(this);
+                event.preventDefault();
+                $.ajax({
+                    url: '/api/snippets/' + that.data('id'),
+                    type: 'DELETE',
+                    success: function () {
+                        $('#snippet-' + that.data('id')).slideUp(500);
+                    },
+                    error: function (error) {
+                        alert(error);
+                    }
+                });
+            });
+        });
+    </script>
+EOD;
+    ?>
+
     <h4>Snippets:</h4>
 
     <?php
@@ -64,8 +89,19 @@ else:
         <?php
         foreach ($snippets as $snippet) {
             ?>
-            <li class="collection-item">
-                <span class="snippet-title"> Snippet added on <?= $snippet['time'] ?>:</span>
+            <li id="snippet-<?= $snippet['id']; ?>" class="collection-item">
+                <?php
+                if ($ownSnippets) :
+                    ?>
+                    <div class="right snippet-button">
+                        <a href="#" data-id="<?= $snippet['id']; ?>" class="snippet-delete-button waves-effect red-text text-darken-3 waves-light btn btn-flat"><i class="material-icons left">delete</i>Delete</a>
+                    </div>
+                    <?php
+                endif;
+                ?>
+                <span class="snippet-title">
+                    Snippet added on <?= $snippet['time'] ?>:
+                </span>
                 <div class="snippet-content"
                      style="border-left-color: <?= $GLOBALS['snippet_user']['colour']; ?>">
                     <?= $snippet['content']; ?>
