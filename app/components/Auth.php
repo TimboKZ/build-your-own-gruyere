@@ -61,9 +61,7 @@ class Auth
         if (!preg_match(self::$usernameRegex, $username)) {
             return 'Username contains invalid symbols.';
         }
-        $conn = DB::getConnection();
-        $users = $conn->fetchAll("SELECT * FROM users WHERE name = ?", [$username]);
-        if (count($users) > 0) {
+        if (UserManager::getUserByName($username)) {
             return 'This username is already taken.';
         }
         if (empty($displayName)) {
@@ -78,23 +76,14 @@ class Auth
         if (strtolower($password) === $password || !preg_match('/\d/', $password)) {
             return 'Password must contain at least one uppercase, one lowercase character and a number.';
         }
-        $id = Helper::genId();
-        $conn->insert('users', [
-            'id' => $id,
-            'name' => $username,
-            'display_name' => Helper::escapeHTML($displayName),
-            'pass' => Auth::getSalt($id, $password),
-        ]);
+        UserManager::newUser($username, $displayName, $password);
         return '';
     }
 
     public static function changePass(string $userId, string $plainPass)
     {
-        $conn = DB::getConnection();
-        $conn->update('users', [
+        UserManager::updateUser($userId, [
             'pass' => self::getSalt($userId, $plainPass),
-        ], [
-            'id' => $userId,
         ]);
     }
 
@@ -126,15 +115,11 @@ class Auth
         if (!isset($_SESSION['user_id']) || !isset($_SESSION['token'])) {
             return false;
         } else {
-            $sql = "SELECT * FROM users WHERE id = ? LIMIT 1";
-            $stmt = DB::getConnection()->prepare($sql);
-            $stmt->bindValue(1, $_SESSION['user_id']);
-            $stmt->execute();
-            if ($stmt->rowCount() !== 1) {
+            $user = UserManager::getUserById($_SESSION['user_id']);
+            if (!$user) {
                 self::logout();
                 return false;
             }
-            $user = $stmt->fetch();
             if (self::token($user['name'] . $user['pass']) !== $_SESSION['token']) {
                 self::logout();
                 return false;

@@ -9,6 +9,7 @@ namespace BYOG\Managers;
 
 use BYOG\Components\Auth;
 use BYOG\Components\DB;
+use BYOG\Components\Helper;
 
 /**
  * Class UserManager
@@ -16,6 +17,18 @@ use BYOG\Components\DB;
  */
 class UserManager
 {
+    public static function newUser(string $username, string $displayName, string $password)
+    {
+        $id = Helper::genId();
+        $conn = DB::getConnection();
+        $conn->insert('users', [
+            'id' => $id,
+            'name' => $username,
+            'display_name' => Helper::escapeHTML($displayName),
+            'pass' => Auth::getSalt($id, $password),
+        ]);
+    }
+
     public static function getUserById(string $id)
     {
         $conn = DB::getConnection();

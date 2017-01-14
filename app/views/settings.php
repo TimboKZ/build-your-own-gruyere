@@ -34,25 +34,24 @@ $user = UserManager::getUserById($_SESSION['user_id']);
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="icon_url" type="text" name="icon_url" class="validate"
-                               value="<?= $user['icon_url']; ?>"
-                               autocomplete="off">
+                               value="<?= $user['icon_url']; ?>">
                         <label for="icon_url">Icon URL</label>
                         <p class="input-comment">Displayed near your name on the main page. Must be uploaded through the
                             <code>Files</code> section, external sources are not allowed. (i.e. URL should begin with
                             <code><?php
-                            echo sprintf(
-                                "%s://%s/",
-                                isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-                                $_SERVER['SERVER_NAME']
-                            );
-                                ?></code>)</p>
+                                echo sprintf(
+                                    "%s://%s/",
+                                    isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
+                                    $_SERVER['SERVER_NAME']
+                                );
+                                ?></code>). Only <code>jpg</code>, <code>jpeg</code> and <code>png</code> extensions are
+                            allowed. All URL queries will be stripped.</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="colour" type="text" name="colour" class="validate"
-                               value="<?= $user['colour']; ?>" required
-                               autocomplete="off">
+                               value="<?= $user['colour']; ?>" required>
                         <label for="colour">Profile colour</label>
                         <p class="input-comment">Colour that will be used for some elements of your profile, such as
                             snippet box borders. Must be a HEX colour (as seen in CSS), e.g. <code>#09f</code> or
@@ -62,9 +61,19 @@ $user = UserManager::getUserById($_SESSION['user_id']);
                 </div>
                 <div class="row">
                     <div class="input-field col s12">
+                        <input id="website" type="text" name="website" class="validate"
+                               value="<?= $user['website']; ?>">
+                        <label for="website">Personal homepage</label>
+                        <p class="input-comment">Address of your personal homepage, only visible to you.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
                         <textarea id="snippet" name="snippet"
                                   class="materialize-textarea"><?= $user['snippet']; ?></textarea>
                         <label for="snippet">Private snippet</label>
+                        <p class="input-comment">Snippet that is only visible to you. All HTML will be displayed as
+                            plain text.</p>
                     </div>
                 </div>
                 <?php

@@ -15,8 +15,13 @@ class Helper
 {
     public static function uriComps()
     {
-        $uri = mb_ereg_replace('\\?.*?$', '', $_SERVER['REQUEST_URI']);
+        $uri = self::stripQuery($_SERVER['REQUEST_URI']);
         return explode('/', trim($uri, '/'));
+    }
+
+    public static function stripQuery(string $url): string
+    {
+        return mb_ereg_replace('\\?.*?$', '', $url);
     }
 
     public static function genId(): string

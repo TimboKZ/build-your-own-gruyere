@@ -48,6 +48,7 @@ class SettingsController
             $displayName = $_POST['display_name'];
             $iconUrl = isset($_POST['icon_url']) ? $_POST['icon_url'] : $user['icon_url'];
             $colour = isset($_POST['colour']) ? $_POST['colour'] : $user['colour'];
+            $website = isset($_POST['website']) ? $_POST['website'] : $user['website'];
             $snippet = isset($_POST['snippet']) ? $_POST['snippet'] : $user['snippet'];
             if (empty($displayName)) {
                 $GLOBALS['error'] = 'Display name cannot be empty.';
@@ -66,14 +67,20 @@ class SettingsController
                 $GLOBALS['error'] = 'Icon URL must begin with <code>'.$siteAddr.'</code>!';
                 return;
             }
-            if (!preg_match("/^(#[A-Fa-f0-9]{3}|#[A-Fa-f0-9]{6})$/", $colour)) {
+            $iconUrl = Helper::stripQuery($iconUrl);
+            if (!preg_match('/\\.(jpeg|jpg|png)$/', $iconUrl)) {
+                $GLOBALS['error'] = 'Only jpeg, jpg and png extension are allowed for icon URL!';
+                return;
+            }
+            if (!preg_match('/^(#[A-Fa-f0-9]{3}|#[A-Fa-f0-9]{6})$/', $colour)) {
                 $GLOBALS['error'] = 'Invalid colour specified!';
                 return;
             }
             UserManager::updateUser($user['id'], [
                 'display_name' => Helper::escapeHTML($displayName),
-                'icon_url' => $iconUrl,
+                'icon_url' => Helper::escapeHTML($iconUrl),
                 'colour' => $colour,
+                'website' => Helper::escapeHTML($website),
                 'snippet' => Helper::escapeHTML($snippet),
             ]);
             Helper::redirect('/settings');
