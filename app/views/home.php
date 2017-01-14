@@ -6,6 +6,35 @@
  */
 
 use BYOG\Managers\UserManager;
+use BYOG\Components\Auth;
+
+if (Auth::isAdmin()) {
+    ob_start();
+    ?>
+    <script>
+        $(document).ready(function () {
+            $('a.admin-button').click(function (event) {
+                event.preventDefault()
+                var that = $(this);
+                $.ajax({
+                    url: '/api/admin/' + that.data('id'),
+                    type: 'POST',
+                    data: {
+                        action: that.data('action'),
+                    },
+                    success: function () {
+                        location.reload();
+                    },
+                    error: function (jqxhr) {
+                        console.log(jqxhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+    <?php
+    $GLOBALS['scripts'] = ob_get_clean();
+}
 
 $GLOBALS['page_title'] = 'Home';
 include 'includes/header.php';
@@ -28,7 +57,27 @@ include 'includes/header.php';
         foreach ($overview as $user) {
             ?>
             <li class="collection-item avatar">
-                <img src="<?= !empty($user['icon_url']) ? $user['icon_url'] : '/assets/profile.jpg'; ?>" alt="" class="circle">
+                <img src="<?= !empty($user['icon_url']) ? $user['icon_url'] : '/assets/profile.jpg'; ?>" alt=""
+                     class="circle">
+                <?php
+                if (Auth::isAdmin() && $user['id'] !== $_SESSION['user_id']) :
+                    $adminButtons = [
+                        ['delete', 'Delete', 'delete', 'red darken-2'],
+                        ['delete', $user['is_locked'] ? 'Unlock' : 'Lock', 'lock', 'yellow darken-4'],
+                        ['delete', $user['is_disabled'] ? 'Enable' : 'Disable', 'disable', 'yellow darken-4'],
+                        ['delete', $user['is_admin'] ? 'User' : 'Admin', 'admin', ''],
+                    ];
+                    foreach ($adminButtons as $adminButton):
+                        ?>
+                        <div class="right">
+                            <a href="#" data-id="<?= $user['id']; ?>" data-action="<?= $adminButton[2]; ?>"
+                               class="admin-button waves-effect <?= $adminButton[3]; ?> waves-light btn"><?= $adminButton[1]; ?>
+                            </a>
+                        </div>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
                 <h5>
                     <strong class="user-title"><?= $user['display_name']; ?></strong>
                     <?php
@@ -53,13 +102,13 @@ include 'includes/header.php';
                     <strong>Latest snippet:</strong>
                 <div class="snippet-content"
                      style="border-left-color: <?= $user['colour']; ?>"><?= $user['last_snippet']['content']; ?></div>
-                <?php
-                else :
-                    ?>
-                    No snippets to display.
-                    <?php
-                endif;
+            <?php
+            else :
                 ?>
+                No snippets to display.
+                <?php
+            endif;
+            ?>
                 </p>
             </li>
             <?php

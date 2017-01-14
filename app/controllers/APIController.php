@@ -64,7 +64,7 @@ class APIController
                 http_response_code(400);
                 die('Specified user does not exist.');
             }
-            if ($user['user_id'] !== $_SESSION['user_id']) {
+            if ($user['id'] === $_SESSION['user_id']) {
                 http_response_code(400);
                 die('You cannot alter your own parameters.');
             }
@@ -76,13 +76,13 @@ class APIController
             $updates = [];
             switch ($action) {
                 case 'admin':
-                    $updates['is_admin'] = !$user['is_admin'];
+                    $updates['is_admin'] = 1 - $user['is_admin'];
                     break;
                 case 'lock':
-                    $updates['is_locked'] = !$user['is_locked'];
+                    $updates['is_locked'] = 1 - $user['is_locked'];
                     break;
                 case 'disable':
-                    $updates['is_disabled'] = !$user['is_disabled'];
+                    $updates['is_disabled'] = 1 - $user['is_disabled'];
                     break;
                 case 'delete':
                     UserManager::deleteUser($targetId);
@@ -91,10 +91,11 @@ class APIController
                     http_response_code(400);
                     die('Unrecognised action.');
             }
-            if (count($updates) > 0) {
-                UserManager::updateUser($targetId, $user);
+            if ($updates != []) {
+                UserManager::updateUser($targetId, $updates);
             }
             http_response_code(200);
+            die('Action performed!');
         }
 
         http_response_code(404);

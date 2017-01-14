@@ -135,7 +135,7 @@ class Auth
 
     public static function isAdmin(): bool
     {
-        return self::isGuest() && isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+        return !self::isGuest() && isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
     }
 
     public static function isGuest(): bool
