@@ -17,7 +17,7 @@ use BYOG\Components\Helper;
  */
 class UserManager
 {
-    public static function newUser(string $username, string $displayName, string $password)
+    public static function createUser(string $username, string $displayName, string $password)
     {
         $id = Helper::genId();
         $conn = DB::getConnection();
@@ -26,6 +26,14 @@ class UserManager
             'name' => $username,
             'display_name' => Helper::escapeHTML($displayName),
             'pass' => Auth::getSalt($id, $password),
+        ]);
+    }
+
+    public static function deleteUser(string $userId)
+    {
+        $conn = DB::getConnection();
+        $conn->delete('users', [
+            'id' => $userId,
         ]);
     }
 

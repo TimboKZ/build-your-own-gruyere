@@ -9,6 +9,7 @@ namespace BYOG\Controllers;
 
 use BYOG\Components\Auth;
 use BYOG\Managers\SnippetManager;
+use BYOG\Managers\UserManager;
 
 /**
  * Class APIController
@@ -50,6 +51,50 @@ class APIController
             unlink($filePath);
             http_response_code(200);
             die('File deleted.');
+        }
+
+        if (count($comps) === 3 && $comps[1] === 'admin' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!Auth::isAdmin()) {
+                http_response_code(403);
+                die('Only admins can perform this action.');
+            }
+            $targetId = $comps[2];
+            $user = UserManager::getUserById($targetId);
+            if (!$user) {
+                http_response_code(400);
+                die('Specified user does not exist.');
+            }
+            if ($user['user_id'] !== $_SESSION['user_id']) {
+                http_response_code(400);
+                die('You cannot alter your own parameters.');
+            }
+            if (!isset($_POST['action'])) {
+                http_response_code(400);
+                die('POST `action` is not set!');
+            }
+            $action = $_POST['action'];
+            $updates = [];
+            switch ($action) {
+                case 'admin':
+                    $updates['is_admin'] = !$user['is_admin'];
+                    break;
+                case 'lock':
+                    $updates['is_locked'] = !$user['is_locked'];
+                    break;
+                case 'disable':
+                    $updates['is_disabled'] = !$user['is_disabled'];
+                    break;
+                case 'delete':
+                    UserManager::deleteUser($targetId);
+                    break;
+                default:
+                    http_response_code(400);
+                    die('Unrecognised action.');
+            }
+            if (count($updates) > 0) {
+                UserManager::updateUser($targetId, $user);
+            }
+            http_response_code(200);
         }
 
         http_response_code(404);

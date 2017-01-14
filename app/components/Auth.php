@@ -76,7 +76,7 @@ class Auth
         if (strtolower($password) === $password || !preg_match('/\d/', $password)) {
             return 'Password must contain at least one uppercase, one lowercase character and a number.';
         }
-        UserManager::newUser($username, $displayName, $password);
+        UserManager::createUser($username, $displayName, $password);
         return '';
     }
 
