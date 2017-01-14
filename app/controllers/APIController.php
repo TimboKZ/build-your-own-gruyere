@@ -8,7 +8,6 @@
 namespace BYOG\Controllers;
 
 use BYOG\Components\Auth;
-use BYOG\Components\CSRFProtection;
 use BYOG\Managers\SnippetManager;
 
 /**

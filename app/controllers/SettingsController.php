@@ -71,10 +71,10 @@ class SettingsController
                 return;
             }
             UserManager::updateUser($user['id'], [
-                'display_name' => str_replace('<', '&lt;', $displayName),
+                'display_name' => Helper::escapeHTML($displayName),
                 'icon_url' => $iconUrl,
                 'colour' => $colour,
-                'snippet' => $snippet,
+                'snippet' => Helper::escapeHTML($snippet),
             ]);
             Helper::redirect('/settings');
         }

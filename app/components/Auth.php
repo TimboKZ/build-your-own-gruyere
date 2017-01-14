@@ -82,7 +82,7 @@ class Auth
         $conn->insert('users', [
             'id' => $id,
             'name' => $username,
-            'display_name' => str_replace('<', '&lt;', $displayName),
+            'display_name' => Helper::escapeHTML($displayName),
             'pass' => Auth::getSalt($id, $password),
         ]);
         return '';

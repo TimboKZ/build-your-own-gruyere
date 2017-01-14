@@ -30,4 +30,14 @@ class Helper
         header('Location: ' . $location);
         die();
     }
+
+    public static function escapeHTML(string $html): string
+    {
+        $html = str_replace('&', '&amp;', $html);
+        $html = str_replace('"', '&quot;', $html);
+        $html = str_replace('\'', '	&apos;', $html);
+        $html = str_replace('<', '&lt;', $html);
+        $html = str_replace('>', '&gt;', $html);
+        return $html;
+    }
 }

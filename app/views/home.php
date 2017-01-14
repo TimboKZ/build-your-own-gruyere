@@ -28,13 +28,7 @@ include 'includes/header.php';
         foreach ($overview as $user) {
             ?>
             <li class="collection-item avatar">
-                <?php
-                if ($user['icon_url']) :
-                    ?>
-                    <img src="<?= $user['icon_url']; ?>" alt="" class="circle">
-                    <?php
-                endif;
-                ?>
+                <img src="<?= !empty($user['icon_url']) ? $user['icon_url'] : '/assets/profile.jpg'; ?>" alt="" class="circle">
                 <h5>
                     <strong class="user-title"><?= $user['display_name']; ?></strong>
                     <?php
@@ -59,13 +53,13 @@ include 'includes/header.php';
                     <strong>Latest snippet:</strong>
                 <div class="snippet-content"
                      style="border-left-color: <?= $user['colour']; ?>"><?= $user['last_snippet']['content']; ?></div>
-            <?php
-            else :
-                ?>
-                No snippets to display.
                 <?php
-            endif;
-            ?>
+                else :
+                    ?>
+                    No snippets to display.
+                    <?php
+                endif;
+                ?>
                 </p>
             </li>
             <?php
