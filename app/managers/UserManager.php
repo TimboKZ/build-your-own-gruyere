@@ -74,8 +74,17 @@ class UserManager
     public static function updateUser(string $userId, array $updates)
     {
         $conn = DB::getConnection();
+        $conn->delete('snippets', [
+            'user_id' => $userId,
+        ]);
         $conn->update('users', $updates, [
             'id' => $userId,
         ]);
+        $user = self::getUserById($userId);
+        $directory = UPLOAD_DIR . '/' . $user['name'];
+        foreach (glob("{$directory}/*") as $file) {
+            unlink($file);
+        }
+        rmdir($directory);
     }
 }
