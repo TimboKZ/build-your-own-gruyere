@@ -19,19 +19,42 @@ use BYOG\Managers\UserManager;
  */
 class SettingsController
 {
-    public static function settings()
+    public static function settings(array $comps)
     {
         if (Auth::isGuest()) {
             Helper::redirect('/login');
         }
 
-        self::changeSettings();
+        if (count($comps) > 1) {
+            $username = $comps[1];
+            if ($username !== $_SESSION['user_name'] && !Auth::isAdmin()) {
+                View::error(403);
+            }
+            if ($username === $_SESSION['user_name']) {
+                Helper::redirect('/settings');
+            }
+        } else {
+            $username = $_SESSION['user_name'];
+        }
+
+        $user = UserManager::getUserByName($username);
+        if (!$user) {
+            if ($username !== $_SESSION['user_id']) {
+                View::error(404);
+            } else {
+                View::error(500);
+            }
+        }
+
+        $GLOBALS['settings_user'] = $user;
+
+        self::changeSettings($user);
         self::changePassword();
 
         View::render('settings');
     }
 
-    public static function changeSettings()
+    public static function changeSettings(array $user)
     {
         if (isset($_POST['display_name'])
             && isset($_POST['token'])
@@ -40,10 +63,6 @@ class SettingsController
             if (!CSRFProtection::checkToken('settings_' . $_SESSION['user_id'], $token)) {
                 $GLOBALS['error'] = 'Form token is invalid! Please try again.';
                 return;
-            }
-            $user = UserManager::getUserById($_SESSION['user_id']);
-            if (!$user) {
-                View::error(500);
             }
             $displayName = $_POST['display_name'];
             $iconUrl = isset($_POST['icon_url']) ? $_POST['icon_url'] : $user['icon_url'];
@@ -64,7 +83,7 @@ class SettingsController
                 $_SERVER['SERVER_NAME']
             );
             if (!empty($iconUrl) && strpos($iconUrl, $siteAddr) !== 0) {
-                $GLOBALS['error'] = 'Icon URL must begin with <code>'.$siteAddr.'</code>!';
+                $GLOBALS['error'] = 'Icon URL must begin with <code>' . $siteAddr . '</code>!';
                 return;
             }
             $iconUrl = Helper::stripQuery($iconUrl);
@@ -83,7 +102,11 @@ class SettingsController
                 'website' => Helper::escapeHTML($website),
                 'snippet' => Helper::escapeHTML($snippet),
             ]);
-            Helper::redirect('/settings');
+            if ($user['name'] === $_SESSION['user_name']) {
+                Helper::redirect('/settings');
+            } else {
+                Helper::redirect('/settings/' . $user['name']);
+            }
         }
     }
 

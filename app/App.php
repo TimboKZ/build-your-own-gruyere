@@ -45,7 +45,7 @@ class App
                 FileController::file();
                 break;
             case 'settings':
-                SettingsController::settings();
+                SettingsController::settings($comps);
                 break;
             case 'login':
                 AuthController::login();

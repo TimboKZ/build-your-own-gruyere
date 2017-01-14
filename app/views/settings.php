@@ -11,10 +11,11 @@ use BYOG\Components\CSRFProtection;
 $GLOBALS['page_title'] = 'Settings';
 include 'includes/header.php';
 
-$user = UserManager::getUserById($_SESSION['user_id']);
+$user = $GLOBALS['settings_user'];
+$ownSettings = $user['id'] === $_SESSION['user_id'];
 ?>
 
-    <h4>Profile settings</h4>
+    <h4><?php echo $ownSettings ? 'Your' : $user['display_name'] . '\'s'; ?> settings</h4>
 
     <div class="row">
         <form class="col s12" method="post">
@@ -90,6 +91,10 @@ $user = UserManager::getUserById($_SESSION['user_id']);
         </form>
     </div>
 
+<?php
+if ($ownSettings) :
+    ?>
+
     <h4>Change password</h4>
 
     <div class="row">
@@ -133,6 +138,10 @@ $user = UserManager::getUserById($_SESSION['user_id']);
             </div>
         </form>
     </div>
+
+    <?php
+endif;
+?>
 
 <?php
 include 'includes/footer.php';

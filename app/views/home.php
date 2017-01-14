@@ -93,6 +93,10 @@ include 'includes/header.php';
                     }
                     ?>
                 </h5>
+                <p>
+                    Admin:
+                    <a href="/settings/<?= $user['name']; ?>">Edit <?= $user['display_name']; ?>'s settings</a>
+                </p>
                 <p><a href="/snippets/<?= $user['name']; ?>">All snippets by <?= $user['display_name']; ?>
                         (<?= $user['name']; ?>)</a></p>
                 <p>

@@ -29,7 +29,7 @@ class SnippetController
             }
             $user = UserManager::getUserById($_SESSION['user_id']);
             if ($user) {
-                self::addSnippet($_SESSION['user_id']);
+                self::addSnippet($user);
                 self::renderSnippets($user);
                 return;
             } else {
@@ -49,7 +49,7 @@ class SnippetController
         View::error(404);
     }
 
-    public static function addSnippet(string $user_id)
+    public static function addSnippet(array $user)
     {
         if (isset($_POST['content']) && isset($_POST['token'])) {
             $content = $_POST['content'];
@@ -58,11 +58,15 @@ class SnippetController
                 $GLOBALS['error'] = 'Form token is invalid! Please try again.';
                 return;
             }
+            if($user['is_disabled']) {
+                $GLOBALS['error'] = 'Your account has been locked by admins. You cannot add new snippets.';
+                return;
+            }
             if (empty($content)) {
                 $GLOBALS['error'] = 'Snippet content cannot be empty.';
                 return;
             }
-            SnippetManager::addSnippet($user_id, nl2br(HTML::purify($content)));
+            SnippetManager::addSnippet($user['id'], nl2br(HTML::purify($content)));
             Helper::redirect('/snippets');
         }
     }

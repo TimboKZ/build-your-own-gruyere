@@ -27,7 +27,7 @@ class FileController
         }
         $user = UserManager::getUserById($_SESSION['user_id']);
         if ($user) {
-            self::uploadFile();
+            self::uploadFile($user);
             $GLOBALS['file_user'] = $user;
             View::render('files');
             return;
@@ -36,15 +36,18 @@ class FileController
         }
     }
 
-    public static function uploadFile()
+    public static function uploadFile(array $user)
     {
         if (isset($_FILES['file'])
             && isset($_POST['token'])
         ) {
-            echo 123;
             $token = $_POST['token'];
             if (!CSRFProtection::checkToken('add_file_' . $_SESSION['user_id'], $token)) {
                 $GLOBALS['error'] = 'Form token is invalid! Please try again.';
+                return;
+            }
+            if($user['is_disabled']) {
+                $GLOBALS['error'] = 'Your account has been locked by admins. You cannot add upload new files.';
                 return;
             }
             $file = $_FILES['file'];
