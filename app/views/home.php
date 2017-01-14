@@ -38,6 +38,60 @@ if (Auth::isAdmin()) {
 
 $GLOBALS['page_title'] = 'Home';
 include 'includes/header.php';
+
+if (!Auth::isGuest()) :
+    $profile = UserManager::getUserById($_SESSION['user_id']);
+    ?>
+    <h4>Your profile</h4>
+    <div class="row">
+        <form class="col s12" method="post">
+            <div class="card-panel white">
+                <?php
+                if (!empty($profile['icon_url'])) :
+                    ?>
+                    <img src="<?= !empty($profile['icon_url']) ? $profile['icon_url'] : '/assets/profile.jpg'; ?>"
+                         alt=""
+                         style="max-width: 100px;margin-right: 20px"
+                         class="circle left">
+                    <?php
+                endif;
+                ?>
+                <h5>
+                    <?= $profile['display_name']; ?>
+                    <span class="grey-text">@<?= $profile['name']; ?></span>
+                </h5>
+                <?php
+                if (!empty($profile['website'])) :
+                    ?>
+                    <p>Your personal homepage: <a href="<?= $profile['website']; ?>"><?= $profile['website']; ?></a></p>
+                    <?php
+                else:
+                    ?>
+                    <p>No personal homepage to display.</p>
+                    <?php
+                endif;
+                ?>
+                <?php
+                if (!empty($profile['snippet'])) :
+                    ?>
+                    <p>Your private snippet:</p>
+                    <div class="snippet-content"
+                         style="border-left-color: <?= $user['colour']; ?>;margin-top: 20px">
+                        <?= $profile['snippet']; ?></div>
+                    <?php
+                else:
+                    ?>
+                    <p>No private snippet to display.</p>
+                    <?php
+                endif;
+                ?>
+            </div>
+        </form>
+    </div>
+
+
+    <?php
+endif;
 ?>
 
     <h4>All registered users</h4>
@@ -93,10 +147,16 @@ include 'includes/header.php';
                     }
                     ?>
                 </h5>
-                <p>
-                    Admin:
-                    <a href="/settings/<?= $user['name']; ?>">Edit <?= $user['display_name']; ?>'s settings</a>
-                </p>
+                <?php
+                if (AUth::isAdmin()) :
+                    ?>
+                    <p>
+                        Admin:
+                        <a href="/settings/<?= $user['name']; ?>">Edit <?= $user['display_name']; ?>'s settings</a>
+                    </p>
+                    <?php
+                endif;
+                ?>
                 <p><a href="/snippets/<?= $user['name']; ?>">All snippets by <?= $user['display_name']; ?>
                         (<?= $user['name']; ?>)</a></p>
                 <p>

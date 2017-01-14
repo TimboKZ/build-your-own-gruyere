@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/mit-license.php MIT License
  */
 
-use BYOG\Managers\UserManager;
+use BYOG\Components\Helper;
 use BYOG\Components\CSRFProtection;
 
 $GLOBALS['page_title'] = 'Settings';
@@ -39,13 +39,7 @@ $ownSettings = $user['id'] === $_SESSION['user_id'];
                         <label for="icon_url">Icon URL</label>
                         <p class="input-comment">Displayed near your name on the main page. Must be uploaded through the
                             <code>Files</code> section, external sources are not allowed. (i.e. URL should begin with
-                            <code><?php
-                                echo sprintf(
-                                    "%s://%s/",
-                                    isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-                                    $_SERVER['SERVER_NAME']
-                                );
-                                ?></code>). Only <code>jpg</code>, <code>jpeg</code> and <code>png</code> extensions are
+                            <code><?= Helper::getHost(); ?></code>). Only <code>jpg</code>, <code>jpeg</code> and <code>png</code> extensions are
                             allowed. All URL queries will be stripped.</p>
                     </div>
                 </div>

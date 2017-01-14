@@ -25,6 +25,7 @@ class UserManager
             'id' => $id,
             'name' => $username,
             'display_name' => Helper::escapeHTML($displayName),
+            'website' => Helper::getHost() . 'snippets/' . $username,
             'pass' => Auth::getSalt($id, $password),
         ]);
     }
@@ -32,9 +33,18 @@ class UserManager
     public static function deleteUser(string $userId)
     {
         $conn = DB::getConnection();
+        $conn->delete('snippets', [
+            'user_id' => $userId,
+        ]);
         $conn->delete('users', [
             'id' => $userId,
         ]);
+        $user = self::getUserById($userId);
+        $directory = UPLOAD_DIR . '/' . $user['name'];
+        foreach (glob("{$directory}/*") as $file) {
+            unlink($file);
+        }
+        rmdir($directory);
     }
 
     public static function getUserById(string $id)
@@ -74,17 +84,8 @@ class UserManager
     public static function updateUser(string $userId, array $updates)
     {
         $conn = DB::getConnection();
-        $conn->delete('snippets', [
-            'user_id' => $userId,
-        ]);
         $conn->update('users', $updates, [
             'id' => $userId,
         ]);
-        $user = self::getUserById($userId);
-        $directory = UPLOAD_DIR . '/' . $user['name'];
-        foreach (glob("{$directory}/*") as $file) {
-            unlink($file);
-        }
-        rmdir($directory);
     }
 }
