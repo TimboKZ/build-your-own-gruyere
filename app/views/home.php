@@ -76,7 +76,7 @@ if (!Auth::isGuest()) :
                     ?>
                     <p>Your private snippet:</p>
                     <div class="snippet-content"
-                         style="border-left-color: <?= $user['colour']; ?>;margin-top: 20px">
+                         style="border-left-color: <?= $profile['colour']; ?>;margin-top: 20px">
                         <?= $profile['snippet']; ?></div>
                     <?php
                 else:
