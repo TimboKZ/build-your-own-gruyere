@@ -27,9 +27,14 @@ class SettingsController
 
         if (count($comps) > 1) {
             $username = $comps[1];
+
+
             if ($username !== $_SESSION['user_name'] && !Auth::isAdmin()) {
                 View::error(403);
             }
+
+
+
             if ($username === $_SESSION['user_name']) {
                 Helper::redirect('/settings');
             }
@@ -87,7 +92,7 @@ class SettingsController
                 return;
             }
             $iconUrl = Helper::stripQuery($iconUrl);
-            if (!preg_match('/\\.(jpeg|jpg|png)$/', $iconUrl)) {
+            if (!empty($iconUrl) && !preg_match('/\\.(jpeg|jpg|png)$/', $iconUrl)) {
                 $GLOBALS['error'] = 'Only jpeg, jpg and png extension are allowed for icon URL!';
                 return;
             }

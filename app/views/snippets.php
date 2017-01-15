@@ -47,8 +47,12 @@ if ($ownSnippets) :
     <div class="row">
         <form class="col s12" method="post">
             <div class="card-panel white">
-                <input type="hidden" name="token"
-                       value="<?= CSRFProtection::genToken('add_snippet_' . $_SESSION['user_id']) ?>">
+
+                <input type="hidden"
+                       name="token"
+                       value="<?= CSRFProtection::genToken('add_snippet_' . $_SESSION['user_id']) ?>"
+                >
+
                 <div class="row">
                     <div class="input-field col s12">
                         <?php

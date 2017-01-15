@@ -53,12 +53,14 @@ class SnippetController
     {
         if (isset($_POST['content']) && isset($_POST['token'])) {
             $content = $_POST['content'];
+
             $token = $_POST['token'];
             if (!CSRFProtection::checkToken('add_snippet_' . $_SESSION['user_id'], $token)) {
                 $GLOBALS['error'] = 'Form token is invalid! Please try again.';
                 return;
             }
-            if($user['is_disabled']) {
+
+            if ($user['is_disabled']) {
                 $GLOBALS['error'] = 'Your account has been locked by admins. You cannot add new snippets.';
                 return;
             }

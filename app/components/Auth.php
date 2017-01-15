@@ -26,6 +26,7 @@ class Auth
         if (!$user) {
             return false;
         }
+
         if (!self::verifySalt($user['id'], $password, $user['pass'])) {
             $fails = $user['failed_attempts'] + 1;
             $lock = $fails >= 3 ? 1 : 0;
@@ -37,6 +38,7 @@ class Auth
             ]);
             return false;
         }
+
         if ($user['is_locked']) {
             return false;
         } else {

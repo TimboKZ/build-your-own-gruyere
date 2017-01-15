@@ -20,8 +20,10 @@ $ownSettings = $user['id'] === $_SESSION['user_id'];
     <div class="row">
         <form class="col s12" method="post">
             <div class="card-panel white">
+
                 <input type="hidden" name="token"
                        value="<?= CSRFProtection::genToken('settings_' . $_SESSION['user_id']) ?>">
+
                 <div class="row">
                     <div class="input-field col s12">
                         <input id="display_name" type="text" name="display_name" class="validate"
